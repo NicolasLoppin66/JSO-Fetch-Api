@@ -1,4 +1,4 @@
-name: js-oop-webpack
+name: jso-fetch-meteo-api
 services:
   node:
     type: node:16
