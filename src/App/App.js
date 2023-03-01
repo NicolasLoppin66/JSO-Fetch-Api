@@ -1,12 +1,40 @@
-const API_KEY = "{CLE API}";
+import { WeatherService } from "./Services/WeatherService";
+
+const API_KEY = "f318c51b5abe55527e312acb7d3d25e4";
 
 class App {
+
+    WeatherServiceFr;
+    WeatherServiceGb;
+    WeatherServiceUs;
+
+    constructor() {
+        this.WeatherServiceFr = new WeatherService(API_KEY);
+        this.WeatherServiceGb = new WeatherService(API_KEY, {
+            lang: 'en'
+        });
+        this.WeatherServiceUs = new WeatherService(API_KEY, {
+            lang: 'en',
+            units: 'imperial'
+        });
+    }
 
     start() {
         console.log('App démarrer ...');
 
-        // http://api.openweathermap.org/data/2.5/forecast?id=524901&appid=
+        // La méteo en français
+        this.WeatherServiceFr
+            .getCurrent({ lat: 42.5, lon: 2.7 }) // Promise emise par JSON()
+            .then(dataJSON => {
+                console.log(dataJSON);
+            });
+        // La méteo en anglais systeme metrique
+        this.WeatherServiceGb.getCurrent({ lat: 42.5, lon: 2.7 });
+        // La méteo en anglais systeme impérial
+        this.WeatherServiceUs.getCurrent({ lat: 42.5, lon: 2.7 });
 
+        // http://api.openweathermap.org/data/2.5/forecast?id=524901&appid=
+        /*
         // Démo découpée du fonctionnement du fetch
         let lat = 42.67945204720265;
         let lon = 2.79457409810873;
@@ -37,7 +65,7 @@ class App {
         jsonPromise.then(data => {
             console.log(data);
         });
-
+        */
     }
 }
 
