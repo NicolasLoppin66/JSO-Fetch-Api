@@ -1,8 +1,11 @@
+import { CurrentWeather } from "./Entities/CurrentWeather";
 import { WeatherService } from "./Services/WeatherService";
 
 const API_KEY = "f318c51b5abe55527e312acb7d3d25e4";
 
 class App {
+
+    elMain;
 
     WeatherServiceFr;
     WeatherServiceGb;
@@ -10,6 +13,7 @@ class App {
 
     constructor() {
         this.WeatherServiceFr = new WeatherService(API_KEY);
+
         this.WeatherServiceGb = new WeatherService(API_KEY, {
             lang: 'en'
         });
@@ -22,12 +26,13 @@ class App {
     start() {
         console.log('App démarrer ...');
 
+        this.elMain = document.createElement('main');
+        document.body.append(this.elMain);
+
         // La méteo en français
         this.WeatherServiceFr
             .getCurrent({ lat: 42.5, lon: 2.7 }) // Promise emise par JSON()
-            .then(serviceResponse => {
-                console.log(serviceResponse);
-            });
+            .then(this.handlerServiceResponse.bind(this));
 
         // http://api.openweathermap.org/data/2.5/forecast?id=524901&appid=
         /*
@@ -62,6 +67,31 @@ class App {
             console.log(data);
         });
         */
+    }
+
+    /**
+     * Gere la réponse du service 
+     */
+    handlerServiceResponse(serviceResponse) {
+        if (!serviceResponse.ok) {
+            this.elMain.append(this.getErrorDOM(serviceResponse.error));
+            return;
+        }
+
+        const currentWeather = new CurrentWeather(serviceResponse.data);
+
+        this.elMain.append(currentWeather.getDOM());
+    }
+
+    /**
+     * Crée le DOM pour afficher une erreur
+     */
+    getErrorDOM(error) {
+        const elDiv = document.createElement('div');
+        elDiv.classList.add('weather-item', 'error');
+        elDiv.innerText = error.message;
+
+        return elDiv;
     }
 }
 
