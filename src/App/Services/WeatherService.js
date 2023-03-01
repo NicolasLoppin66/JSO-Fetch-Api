@@ -1,4 +1,5 @@
 import { HttpUtils } from "../httpUtils";
+import { ServiceResponse } from "./ServiceResponse";
 
 export class WeatherService {
     API_KEY;
@@ -25,10 +26,12 @@ export class WeatherService {
 
         let url = HttpUtils.buildUrl(baseUrl, coords);
 
-        console.log(url);
-
         // Lancement de la requete
-        return fetch(url) // Promise emise par fetch()
-            .then(response => response.json()) // Promise emise par json()
+        return new Promise(resolve => {
+            fetch(url) // Promise emise par fetch()
+                .then(response => response.json()) // Promise emise par json()
+                .then(dataJSON => resolve(new ServiceResponse(true, null, dataJSON)))
+                .catch(error => { resolve(new ServiceResponse(false, error, null)) })
+        });
     }
 }

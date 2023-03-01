@@ -25,13 +25,9 @@ class App {
         // La méteo en français
         this.WeatherServiceFr
             .getCurrent({ lat: 42.5, lon: 2.7 }) // Promise emise par JSON()
-            .then(dataJSON => {
-                console.log(dataJSON);
+            .then(serviceResponse => {
+                console.log(serviceResponse);
             });
-        // La méteo en anglais systeme metrique
-        this.WeatherServiceGb.getCurrent({ lat: 42.5, lon: 2.7 });
-        // La méteo en anglais systeme impérial
-        this.WeatherServiceUs.getCurrent({ lat: 42.5, lon: 2.7 });
 
         // http://api.openweathermap.org/data/2.5/forecast?id=524901&appid=
         /*
