@@ -3,6 +3,8 @@ import { Wind } from "./WInd";
 import { Weather } from "./Weather";
 import { Main } from "./main";
 
+const iconCDN = "http://openweathermap.org/img/w/";
+
 export class CurrentWeather {
 
     weather;
@@ -46,7 +48,15 @@ export class CurrentWeather {
         const elDiv = document.createElement('div');
         elDiv.classList.add('weather-item');
 
-        // TODO 
+        let html = `<h2>${this.locationName}</h2>`;
+        html += `<div><img src="${iconCDN + this.weather.icon}.png" alt="${this.weather.description}" title="${this.weather.description}"></img></div>`
+        html += '<ul>';
+        html += `<li><strong>Température :</strong> ${this.main.temp} °C - ( ${this.main.feels_like} °C ressenti )</li>`;
+        html += `<li><strong>Température min :</strong>${this.main.temp_min}</li>`;
+        html += `<li><strong>Température max :</strong>${this.main.temp_max}</li>`;
+        html += '</ul>';
+
+        elDiv.innerHTML = html;
 
         return elDiv;
     }
